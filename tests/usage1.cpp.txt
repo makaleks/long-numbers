@@ -1,0 +1,116 @@
+#include <iostream>
+//#include <exception>
+#include <cstdlib>
+#include <ctime>
+using namespace std;
+
+#include "lnum.hpp"
+
+
+int main () {
+    printf("te\nga\b\b\b   \nline\nline");
+    //auto ok = LNum::OK, nullinput = LNum::NULLINPUT;
+    //std::printf("%s\n%s\n", (char*)&ok, (char*)&nullinput);
+    /*
+    LNum a = 0xABCDEF12345; // == 11806310474565 
+    puts("1:");
+    cout << "a(u64) = " << a.getu64() << endl << "a(hex) = ";
+    a.printHex();
+    cout <<  endl << "a(hex) = ";
+    a     -= 0x0B0D0F02040; // == 0xA0C0E010305
+    a.printHex();
+    cout <<  endl;
+    if (a == 0xA0C0E010305)
+        cout << "OK" << endl;
+    else
+        cout << "Error" << endl;
+    puts("2:");
+    cout << "a(hex) = ";
+    a = 987654321;
+    a.printHex();
+    cout << endl << "b(hex) = ";
+    LNum b = 123456789;
+    b.printHex();
+    cout <<  endl;
+    cout << "a > b: " << (a > b ? "true" : "false") << endl;
+    LNum c = a + b; // == 1111111110
+    cout << "c = a + b = ";
+    c.printHex();puts("");
+    printf("vs %x\n", 1111111110);
+    if (c == 1111111110)
+        cout << "OK" << endl;
+    else
+        cout << "Error" << endl;//*/
+
+    LNum a, b, c;
+
+    puts("\n\nTEST 1\n");
+    // len = 6
+    a = "0x8888000005008888034100";
+    // len = 5
+    b = "0x44440000000044440000";
+    // = 0x200, mod = 0x0005000000034100
+    (a/b).printHex();
+
+    cout << "\n\nTEST 2\n\n";
+    // len = 7
+    a = "0x1856195791643789385725649278";
+    // len = 5
+    b = "0x124789345698762847";
+    c = a / b;
+    // = 0x154D3563726, mod = 0x0011ad3ebf8b145956ee
+    c.printHex();
+
+    cout << "\n\nTEST 3\n\n";
+    // len = 7
+    a = "0x4375493818329ABFCEB23049ACB";
+    // len = 5
+    b = "0xABDC2348239A238";
+    c = a / b;
+    // = 0x647C13141722, mod = 0x06f89393d56a075b
+    c.printHex();
+    cout << endl;
+    /*
+    puts("Start:");
+    c = a / b;
+    c.printHex();
+    puts("Check random:");
+    auto make_64 = []() -> uint64_t {
+        uint64_t result = rand();
+        for (size_t i = 0; i < 3; i++) {
+            result = (result << 16) + rand();
+        }
+        return result;
+    };
+    srand(std::time(NULL));
+    size_t err_num = 0;
+    for (size_t i = 0; i < 25; i++) {
+        cout << i << ")\n";
+        a = make_64();
+        b = make_64();
+        c = a + b;
+        printf("a = ");
+        a.printHex();
+        cout << endl;
+        printf("b = ");
+        b.printHex();
+        cout << endl;
+        printf("c = a + b = ");
+        c.printHex();
+        cout << endl;
+        if (c - b == a)
+            puts("Equal");
+        else {
+            err_num++;
+            puts("Not equal");
+        }
+    }
+    if (err_num)
+        cout << "Errors: " << err_num << endl;
+    else
+        cout << "No errors!";
+//*/
+    puts("");
+    return 0;
+}
+

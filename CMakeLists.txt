@@ -1,8 +1,9 @@
 cmake_minimum_required(VERSION 2.8)
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++14")
+#set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++14")
 project("long-numbers")
 
 include_directories(${CMAKE_SOURCE_DIR}/include)
+message(STATUS ${CMAKE_SOURCE_DIR})
 
 #set(CMAKE_BUILD_TYPE Debug)
 
@@ -31,6 +32,7 @@ set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${PROJECT_OUTPUT_DIRECTORY})
 # C++ file list
 file(GLOB_RECURSE LONG_NUMBERS_SRC "src/*.cpp" "src/*.hpp") 
 set(LIB_SOURCE_LIST ${LONG_NUMBERS_SRC})
+#message(STATUS "List is: " ${LIB_SOURCE_LIST})
 add_library(long-numbers STATIC ${LIB_SOURCE_LIST})
 
 # Compilation info to JSON
