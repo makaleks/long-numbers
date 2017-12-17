@@ -1,5 +1,4 @@
 #include <iostream>
-//#include <exception>
 #include <cstdlib>
 #include <ctime>
 using namespace std;
@@ -42,7 +41,7 @@ void run_iteration(size_t i) {
         printf("\rRunning: %ld ", i);
     test_all();
 }
-
+/*
 LNum my_nod(LNum a, LNum b) {
     char b1[N*4+3]={},b2[N*4+3]={};
     size_t i = 0x1000000;
@@ -61,7 +60,7 @@ LNum my_nod(LNum a, LNum b) {
         puts("failed\n");
     }
     return a + b;
-}
+}*/
 //#define MDEBUG 0
 
 int main () {
