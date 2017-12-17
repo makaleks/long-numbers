@@ -34,7 +34,7 @@ public:
         if (n < N*sizeof(*data_)) {
             if (0 == n % 2)
                 return data_[n/2] & 0xFF;
-            else return data_[n/2] & 0xFF00 >> 8;
+            else return (data_[n/2] & 0xFF00) >> 8;
         }
         else return 0xFF;
     }

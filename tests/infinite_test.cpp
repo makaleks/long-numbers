@@ -62,16 +62,9 @@ LNum my_nod(LNum a, LNum b) {
     }
     return a + b;
 }
-//#define MDEBUG 0
+#define MDEBUG 0
 
 int main () {
-    /*LNum e = "0xd6457f9427cd2de983d02dbb5179e326063a1178e6dfbaf12fbf14e589e2a6e5";
-    LNum d = "0x1c200cec28efe52448dc64e95b3044f10cc848315e7825f9e4e5ef5d7af908ad";
-    LNum n = "0xd9ae128b74cd0aa3678f8a173d6d43871b7bdae59c721158ba83d640ffcb6d13";
-    std::string str = "This is test";
-    std::vector<LNum> result;
-    result = rsa_encrypt(str, e, n);
-    cout << rsa_decrypt(result, d, n) << "\n";//*/
     //*
 #ifdef MDEBUG
     auto my_print=[](const uint16_t *buf, size_t n, const char* to_print="") {
@@ -116,6 +109,32 @@ int main () {
             }
         }
     };
+    //*
+#ifdef MDEBUG
+    LNum e = "0xd6457f9427cd2de983d02dbb5179e326063a1178e6dfbaf12fbf14e589e2a6e5";
+    LNum d = "0x1c200cec28efe52448dc64e95b3044f10cc848315e7825f9e4e5ef5d7af908ad";
+    LNum n = "0xd9ae128b74cd0aa3678f8a173d6d43871b7bdae59c721158ba83d640ffcb6d13";
+    cout << "# Check equal\n";
+    LNum tmp = "0x546869732069732074657374";
+    puts("Before:");
+    tmp.printHex();puts("");
+    puts("After");
+    tmp = pow(tmp, LNum(e), LNum(n));
+    tmp = pow(tmp, LNum(d), LNum(n));
+    tmp.printHex();puts("");
+
+    std::string str = "This is test";
+    std::vector<LNum> result;
+    result = rsa_encrypt(str, e, n);
+    std:string s = rsa_decrypt(result, d, n);
+    cout << "# Text\n" << s << "\n";
+    cout << "Byte:\n";
+    for (char c : s) {
+        printf("%02X", c);
+    }
+    cout << "\n";
+#endif
+    //*/
     /*
     uint16_t base[N] = {};
     my_fill(base, N, "0x000000000000000000000000000000000000A97B9A303DA11D524FE56C8AE834");
@@ -128,9 +147,7 @@ int main () {
     p = LNum(power, N);
     pow(b,p,m);
     //*/
-    //uint16_t left[N+N]={};
-    //uint16_t right[N]={};
-    //*
+    /*
     uint16_t left[N+N]={0xFFFF,0xFFFF,0xFFFF,0xFFFF,0xFFFF,0xFFFF,0xFFFF,0xFFFF,0xFFFF,0xFFFF,0xFFFF,0xFFFF,0xFFFF,0xFFFF,0xFFFF,0xFFFF,0xFFFF,0xFFFF,0xFFFF,0xFFFF,0xFFFF,0xFFFF,0xFFFF,0xFFFF,0xFFFF,0xFFFF,0xFFFF,0xFFFF,0xFFFF,0xFFFF,0xFFFF,0xFFFF};
     uint16_t right[N]={0xFFFF,0xFFFF,0xFFFF,0xFFFF,0xFFFF,0xFFFF,0xFFFF,0xFFFF,0xFFFF,0xFFFF,0xFFFF,0xFFFF,0xFFFF,0xFFFF,0xFFFF,0xFFFF};
     my_fill(left, N+N, "0xd9aea3cdda46ef9e3afcae31d5926f6f3f6bde832ed43b8a02204b3835882b4181775625fd329664f20a299e57c7e16b50291f8b62799a5fe24c41bae400");

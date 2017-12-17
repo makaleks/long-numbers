@@ -14,8 +14,7 @@ std::vector<LNum> rsa_encrypt (const std::string str, const LNum openKey, const 
     LNum message, result;
     std::vector<LNum> toRet;
     char c = 0;
-    while(i < len) {
-            for (j = 0; j < N && i < len; j++, i++) {
+    auto str_to_bytes = [&]() {
                 c = (str[i] & 0xF0) >> 4;
                 if (c < 10) c += '0';
                 else c += 'A' - 10;
@@ -24,14 +23,19 @@ std::vector<LNum> rsa_encrypt (const std::string str, const LNum openKey, const 
                 if (c < 10) c += '0';
                 else c += 'A' - 10;
                 buf[2 + j*2 + 1] = c;
+    };
+    while(i < len) {
+            for (j = N - 1; j < N && i < len; j--, i++) {
+                str_to_bytes();
             }
-        if (j < N*2)
-            for (; j < N; j++)
-                buf[2 + j*2] = buf[2 + j*2 + 1] = 0;
+        if (j > 0)
+            for (; j < N; j--)
+                buf[2 + j*2] = buf[2 + j*2 + 1] = '0';
         // RSA start
         message = buf;
         std::cout<<"input:\n"<<str<<"\nresult:\n";
-        message.printHex();puts("");
+        //message.printHex();puts("");
+        puts(buf);
         result = pow(message, openKey, module);
         toRet.push_back(result);
     }
@@ -42,7 +46,7 @@ std::string rsa_decrypt (const std::vector<LNum> vec, const LNum privateKey, con
     LNum message;
     size_t len = vec.size();
     std::string result;
-    size_t i = 0, j = 5;
+    size_t i = 0, j = 0;
     for (i = 0; i < len; i++) {
         message = pow(vec[i], privateKey, module);
         for (j = 0; j < N*2; j++) {
