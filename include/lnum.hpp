@@ -30,6 +30,22 @@ public:
         NULLINPUT = 0x004C554E, // NUL
         ZERODIV = 0x0056445A,   // ZDV
     };
+    _ERR_CODE get_raw(void *buf, size_t size) {
+        if (nullptr == buf || size == 0)
+            return NULLINPUT;
+        size_t n_size = size <= N*sizeof(data_) ? size : N*sizeof(data_);
+        memcpy(buf, data_, n_size);
+        return OK;
+    }
+    _ERR_CODE set_raw(const void *buf, size_t size) {
+        if (nullptr == buf || size == 0)
+            return NULLINPUT;
+        clear();
+        size_t n_size = size <= N*sizeof(data_) ? size : N*sizeof(data_);
+        memcpy(data_, buf, n_size);
+        //for(auto j=0;j<n_size;j++)putchar(((char*)data_)[j]);puts("");
+        return OK;
+    }
     uint8_t get_byte(size_t n) {
         if (n < N*sizeof(*data_)) {
             if (0 == n % 2)
@@ -37,6 +53,13 @@ public:
             else return (data_[n/2] & 0xFF00) >> 8;
         }
         else return 0xFF;
+    }
+    void set_byte(unsigned char b, size_t n) {
+        if (n < N*sizeof(*data_)) {
+            if (0 == n % 2)
+                *((unsigned char*)&data_[n/2]) = b;
+            else *(1 + (unsigned char*)&data_[n/2]) = b;
+        }
     }
     // Possible result = left
     static _ERR_CODE _add(const uint16_t *left, const size_t l_size, const uint16_t *right, const size_t r_size, uint16_t *result, const size_t res_size, uint16_t *overflow_ptr = nullptr);
@@ -417,7 +440,7 @@ LNum::_ERR_CODE LNum::_mul(const uint16_t *left, const size_t l_size, const uint
     if (overflow_ptr) *overflow_ptr = overflow;
     return LNum::OK;
 }
-#define DEBUG 0
+//#define DEBUG 0
 #ifdef DEBUG
 bool DO_PRINT = false;
 #endif
@@ -794,7 +817,7 @@ LNum::_ERR_CODE LNum::_div(const uint16_t *left, uint16_t *l_copy, size_t l_size
         return err;
     return LNum::OK;
 }*/
-
+#ifdef DEBUG
 void is_correct_div(const uint16_t *left, const uint16_t *right, const uint16_t *residue, const uint16_t *answ, size_t I, char is_inside, const uint16_t *mb, LNum base, LNum power, LNum mod) {
     if (!left || !right || !residue || !answ) {
         puts("\n\nZEROINPUT Error!!\n");
@@ -841,6 +864,7 @@ void is_correct_div(const uint16_t *left, const uint16_t *right, const uint16_t 
         exit(-1);
     }
 }
+#endif
 
 LNum::_ERR_CODE LNum::_pow(const uint16_t *base, const size_t b_size, const uint16_t *power, const size_t pow_size, uint16_t *result, uint16_t *buf, uint16_t *big_buf, uint16_t *great_buf, const size_t res_size, const uint16_t *mod, const size_t mod_size) {
     if (base == nullptr || power == nullptr || result == nullptr || buf == nullptr || great_buf == nullptr || big_buf == nullptr) {

@@ -62,7 +62,7 @@ LNum my_nod(LNum a, LNum b) {
     }
     return a + b;
 }
-#define MDEBUG 0
+//#define MDEBUG 0
 
 int main () {
     //*
@@ -253,22 +253,23 @@ int main () {
 // Infinite
     //*
 #ifndef MDEBUG
-    puts("Nice!");
     std::srand(std::time(NULL));
-    const size_t NUM = 100'000'000;// it is correct in C++14
+    //const size_t NUM = 100'000'000;// it is correct in C++14
+    const size_t NUM = 0;// it is correct in C++14
     const char* const hello = "\
 This is a test program for the Long-Numbers library.\n\
 It runs all tests for each module and displays the iteration number.\n\
 All errors will be displayed here.\n\
 \n\
 Current restrictions are:\n\
-- Number of iterations = %lu\n\
+- Number of iterations = %lu%s\n\
 - Number of uint16_t   = %d = %d bits\n\
 \n\
 Use Ctrl+C or Ctrl+4 to stop running tests.\n\
 \n\
 ";
-    printf(hello, NUM, N, N*16);
+    printf(hello, NUM, NUM ? "" : " (infinite)", N, N*16);
+    // Worked great up to 1.8 million iterations (all night)
     for (size_t i = 1; /*i < NUM*/; i++) {
         try {
             run_iteration(i);
@@ -289,12 +290,15 @@ static void test_mul_div_cmp();
 static void test_mul_pow_mod_cmp();
 
 void test_all() {
-    //test_add_sub_cmp();
-    //test_mul_div_cmp();
+    test_add_sub_cmp();
+    test_mul_div_cmp();
     test_mul_pow_mod_cmp();
 }
 
-LNum genLNum() {
+const size_t GEN_HALF = 2;
+const size_t GEN_FULL = 4;
+
+LNum genLNum(size_t type_len) {
     LNum result;
     auto gen64 = []() -> uint64_t {
         uint64_t result = 0;
@@ -307,7 +311,7 @@ LNum genLNum() {
     };
     // 2 for half, 4 for full
     // size should be half to run 'mul' tests properly
-    for (size_t i = 0; i < 4; i++) {
+    for (size_t i = 0; i < type_len; i++) {
         result *= 0x1'0000'0000'0000;
         result += gen64();
     }
@@ -315,7 +319,7 @@ LNum genLNum() {
 }
 
 void test_add_sub_cmp() {
-    LNum a = genLNum(), b = genLNum();
+    LNum a = genLNum(GEN_HALF), b = genLNum(GEN_HALF);
     LNum c = a + b;
     LNum d = c - b;
     const char *error = "\
@@ -332,7 +336,7 @@ void test_add_sub_cmp() {
 }
 
 void test_mul_div_cmp() {
-    LNum a = genLNum(), b = genLNum();
+    LNum a = genLNum(GEN_HALF), b = genLNum(GEN_HALF);
     LNum c = a * b;
     LNum d = c / b;
     LNum e = c % b;
@@ -371,7 +375,7 @@ void test_mul_pow_mod_cmp() {
     //LNum e = "0x7";//3
     //LNum d = "0xD";//8
     //LNum n = "0x5B";//91 -> ei=24
-    LNum var = genLNum();
+    LNum var = genLNum(GEN_FULL);
     var %= n;
     LNum test1 = pow(var, e, n);
     LNum test2 = pow(test1, d, n);
